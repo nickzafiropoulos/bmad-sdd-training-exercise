@@ -1,0 +1,27 @@
+# Dependencies and build
+node_modules/
+.next/
+out/
+build/
+coverage/
+
+# Env (never commit secrets)
+.env
+.env*.local
+
+# Database (local SQLite; Docker uses volume)
+*.sqlite
+*.sqlite-journal
+
+# IDE and OS
+.DS_Store
+.idea
+*.log
+
+# Playwright
+zaffr/playwright-report/
+zaffr/test-results/
+
+# Misc
+*.tsbuildinfo
+.vercel

@@ -1,0 +1,28 @@
+# Dependencies and build output (rebuilt in container)
+node_modules
+.next
+npm-debug.log*
+
+# Git and IDE
+.git
+.gitignore
+.cursor
+*.md
+
+# Tests and tooling (not needed in production image)
+__tests__
+e2e
+coverage
+playwright-report
+*.spec.ts
+*.test.ts
+vitest.config.ts
+playwright.config.ts
+
+# Env (set at runtime)
+.env
+.env.*
+
+# Misc
+.DS_Store
+*.log

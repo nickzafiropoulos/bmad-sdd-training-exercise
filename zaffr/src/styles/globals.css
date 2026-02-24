@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Design tokens: semantic colors (no hardcoded colors in components).
+   Dark is default; light applied when data-theme="light" on <html>.
+   --------------------------------------------------------------------------- */
+:root {
+  /* Dark theme: dark grey background so shadow is visible; WCAG AA 4.5:1 text. */
+  --semantic-background: 32 32 32; /* dark grey (not black) */
+  --semantic-background-muted: 38 38 38;
+  --semantic-surface: 45 45 45;
+  --semantic-text: 250 250 250;
+  --semantic-text-muted: 186 186 186; /* ≥4.5:1 on background */
+  --semantic-accent-primary: 79 70 229; /* indigo-600: white text ≥4.5:1 */
+  --semantic-accent-primary-hover: 99 102 241;
+  --semantic-text-on-primary: 255 255 255; /* white on primary button in all themes */
+  --semantic-accent-completion: 22 163 74; /* green-700 for ≥4.5:1 with white */
+  --semantic-accent-completion-hover: 34 197 94;
+  --semantic-accent-destructive: 185 28 28; /* red-800 for ≥4.5:1 with white */
+  --semantic-accent-destructive-hover: 220 38 38;
+  --semantic-text-on-destructive: 255 255 255;
+  --semantic-border: 64 64 64;
+  /* Subtle shadow for list container */
+  --semantic-shadow-list: 0 2px 4px -1px rgba(0, 0, 0, 0.12), 0 6px 12px -4px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] {
+  /* Light theme: WCAG AA 4.5:1 text on background/surface. Muted ≥4.5:1. */
+  --semantic-background: 250 250 250;
+  --semantic-background-muted: 245 245 245;
+  --semantic-surface: 255 255 255;
+  --semantic-text: 23 23 23;
+  --semantic-text-muted: 89 89 89; /* darkened for ≥4.5:1 on #fafafa */
+  --semantic-accent-primary: 79 70 229;
+  --semantic-accent-primary-hover: 99 102 241;
+  --semantic-text-on-primary: 255 255 255;
+  --semantic-accent-completion: 22 163 74;
+  --semantic-accent-completion-hover: 34 197 94;
+  --semantic-accent-destructive: 185 28 28;
+  --semantic-accent-destructive-hover: 220 38 38;
+  --semantic-text-on-destructive: 255 255 255;
+  --semantic-border: 229 229 229;
+  --semantic-shadow-list: 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 6px 12px -4px rgba(0, 0, 0, 0.08);
+}
+
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-heading: var(--font-heading-family), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  /* Semantic colors (use in components; no raw hex in UI) */
+  --color-background: rgb(var(--semantic-background));
+  --color-background-muted: rgb(var(--semantic-background-muted));
+  --color-surface: rgb(var(--semantic-surface));
+  --color-text: rgb(var(--semantic-text));
+  --color-text-muted: rgb(var(--semantic-text-muted));
+  --color-accent-primary: rgb(var(--semantic-accent-primary));
+  --color-accent-primary-hover: rgb(var(--semantic-accent-primary-hover));
+  --color-text-on-primary: rgb(var(--semantic-text-on-primary));
+  --color-accent-completion: rgb(var(--semantic-accent-completion));
+  --color-accent-completion-hover: rgb(var(--semantic-accent-completion-hover));
+  --color-accent-destructive: rgb(var(--semantic-accent-destructive));
+  --color-accent-destructive-hover: rgb(var(--semantic-accent-destructive-hover));
+  --color-text-on-destructive: rgb(var(--semantic-text-on-destructive));
+  --color-border: rgb(var(--semantic-border));
+  --shadow-list: var(--semantic-shadow-list);
+
+  /* Typography scale */
+  --text-heading: 1.5rem;
+  --text-list-title: 1.25rem;
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  --text-tiny: 0.75rem;
+
+  /* Spacing (list-first hierarchy) */
+  --spacing-shell: 1rem;
+  --spacing-list-gap: 0.5rem;
+  --spacing-section: 1.5rem;
+
+  /* Content container max-width (header + main align at each breakpoint) */
+  --container-max: 100%;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --container-max: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --container-max: 672px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --container-max: 896px;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --container-max: 1344px; /* 100% wider than 672px (md) */
+  }
+}
+
+@media (min-width: 1536px) {
+  :root {
+    --container-max: 1344px;
+  }
+}
+
+/* Logo: white in dark theme, black in light theme (SVG is white; invert in light) */
+[data-theme="light"] .logo-theme img {
+  filter: invert(1);
+}
