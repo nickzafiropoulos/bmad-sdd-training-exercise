@@ -1,19 +1,12 @@
-import {
-  Hero,
-  StatsBar,
-  JourneysSection,
-  AboutSection,
-  Footer,
-} from "~/app/_components/landing";
+import { HydrateClient } from "~/trpc/server";
+import { TodoView } from "~/app/_components/todo";
 
 export default function Home() {
   return (
-    <>
-      <Hero />
-      <StatsBar />
-      <JourneysSection />
-      <AboutSection />
-      <Footer />
-    </>
+    <HydrateClient>
+      <section className="w-full" aria-label="Todo list">
+        <TodoView />
+      </section>
+    </HydrateClient>
   );
 }
