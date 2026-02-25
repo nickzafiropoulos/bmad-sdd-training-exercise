@@ -6,31 +6,42 @@
    --------------------------------------------------------------------------- */
 :root {
   /* Dark theme: dark grey background so shadow is visible; WCAG AA 4.5:1 text. */
-  --semantic-background: 32 32 32; /* dark grey (not black) */
+  --semantic-background: 32 32 32;
   --semantic-background-muted: 38 38 38;
   --semantic-surface: 45 45 45;
   --semantic-text: 250 250 250;
-  --semantic-text-muted: 186 186 186; /* ≥4.5:1 on background */
-  --semantic-accent-primary: 79 70 229; /* indigo-600: white text ≥4.5:1 */
+  --semantic-text-muted: 186 186 186;
+  --semantic-accent-primary: 79 70 229;
   --semantic-accent-primary-hover: 99 102 241;
-  --semantic-text-on-primary: 255 255 255; /* white on primary button in all themes */
-  --semantic-accent-completion: 22 163 74; /* green-700 for ≥4.5:1 with white */
+  --semantic-text-on-primary: 255 255 255;
+  --semantic-accent-completion: 22 163 74;
   --semantic-accent-completion-hover: 34 197 94;
-  --semantic-accent-destructive: 185 28 28; /* red-800 for ≥4.5:1 with white */
+  --semantic-accent-destructive: 185 28 28;
   --semantic-accent-destructive-hover: 220 38 38;
   --semantic-text-on-destructive: 255 255 255;
   --semantic-border: 64 64 64;
-  /* Subtle shadow for list container */
   --semantic-shadow-list: 0 2px 4px -1px rgba(0, 0, 0, 0.12), 0 6px 12px -4px rgba(0, 0, 0, 0.15);
+
+  /* Cycling landing page tokens */
+  --semantic-hero-from: 15 23 42;        /* slate-900 */
+  --semantic-hero-via: 30 41 59;         /* slate-800 */
+  --semantic-hero-to: 51 65 85;          /* slate-700 */
+  --semantic-accent-warm: 245 158 11;    /* amber-500 */
+  --semantic-accent-warm-hover: 251 191 36;
+  --semantic-accent-sunset: 249 115 22;  /* orange-500 */
+  --semantic-card-overlay: 15 23 42;     /* card gradient base */
+  --semantic-stat-bg: 30 41 59;
+  --semantic-footer-bg: 15 23 42;
+  --semantic-footer-text: 203 213 225;
+  --semantic-footer-text-muted: 148 163 184;
 }
 
 [data-theme="light"] {
-  /* Light theme: WCAG AA 4.5:1 text on background/surface. Muted ≥4.5:1. */
   --semantic-background: 250 250 250;
   --semantic-background-muted: 245 245 245;
   --semantic-surface: 255 255 255;
   --semantic-text: 23 23 23;
-  --semantic-text-muted: 89 89 89; /* darkened for ≥4.5:1 on #fafafa */
+  --semantic-text-muted: 89 89 89;
   --semantic-accent-primary: 79 70 229;
   --semantic-accent-primary-hover: 99 102 241;
   --semantic-text-on-primary: 255 255 255;
@@ -41,6 +52,19 @@
   --semantic-text-on-destructive: 255 255 255;
   --semantic-border: 229 229 229;
   --semantic-shadow-list: 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 6px 12px -4px rgba(0, 0, 0, 0.08);
+
+  /* Cycling landing page tokens – light theme */
+  --semantic-hero-from: 30 41 59;
+  --semantic-hero-via: 51 65 85;
+  --semantic-hero-to: 71 85 105;
+  --semantic-accent-warm: 217 119 6;     /* amber-600 for contrast */
+  --semantic-accent-warm-hover: 245 158 11;
+  --semantic-accent-sunset: 234 88 12;   /* orange-600 */
+  --semantic-card-overlay: 15 23 42;
+  --semantic-stat-bg: 241 245 249;       /* slate-100 */
+  --semantic-footer-bg: 30 41 59;
+  --semantic-footer-text: 226 232 240;
+  --semantic-footer-text-muted: 148 163 184;
 }
 
 @theme {
@@ -65,6 +89,19 @@
   --color-text-on-destructive: rgb(var(--semantic-text-on-destructive));
   --color-border: rgb(var(--semantic-border));
   --shadow-list: var(--semantic-shadow-list);
+
+  /* Cycling landing page theme colors */
+  --color-hero-from: rgb(var(--semantic-hero-from));
+  --color-hero-via: rgb(var(--semantic-hero-via));
+  --color-hero-to: rgb(var(--semantic-hero-to));
+  --color-accent-warm: rgb(var(--semantic-accent-warm));
+  --color-accent-warm-hover: rgb(var(--semantic-accent-warm-hover));
+  --color-accent-sunset: rgb(var(--semantic-accent-sunset));
+  --color-card-overlay: rgb(var(--semantic-card-overlay));
+  --color-stat-bg: rgb(var(--semantic-stat-bg));
+  --color-footer-bg: rgb(var(--semantic-footer-bg));
+  --color-footer-text: rgb(var(--semantic-footer-text));
+  --color-footer-text-muted: rgb(var(--semantic-footer-text-muted));
 
   /* Typography scale */
   --text-heading: 1.5rem;
@@ -116,3 +153,22 @@
 [data-theme="light"] .logo-theme img {
   filter: invert(1);
 }
+
+/* Landing page animations */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.animate-fade-up {
+  animation: fade-up 0.8s ease-out both;
+}
+.animate-fade-in {
+  animation: fade-in 1s ease-out both;
+}
+.animation-delay-200 { animation-delay: 0.2s; }
+.animation-delay-400 { animation-delay: 0.4s; }
+.animation-delay-600 { animation-delay: 0.6s; }

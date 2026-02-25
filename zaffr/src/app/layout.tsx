@@ -9,8 +9,8 @@ import { Shell } from "~/app/_components/shell";
 import { TRPCReactProvider } from "~/trpc/react";
 
 export const metadata: Metadata = {
-  title: "Zaffr",
-  description: "Minimal todo list that works",
+  title: "Road & Ridgelines — Cycling the World",
+  description: "One rider's road bike journeys across mountains, coastlines, and continents.",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
