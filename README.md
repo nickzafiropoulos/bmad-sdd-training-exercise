@@ -48,24 +48,121 @@ The app is exposed on [http://localhost:3000](http://localhost:3000). SQLite dat
 
 ### Deploying to Vercel
 
-1. **Root Directory:** `zaffr` (Project → Settings → General / Build and Deployment).
-2. **Framework Preset:** **Next.js** — not **Other**. If Vercel uses “Other”, it treats the site as static files and you get **`404 NOT_FOUND`** on every route because there is no `index.html` at the output root. The repo includes [`zaffr/vercel.json`](./zaffr/vercel.json) with `"framework": "nextjs"` so the correct preset is applied even when the dashboard was set to Other.
-3. **Database (required):** Vercel has no persistent disk, so **`file:./db.sqlite` does not work**. Use [Turso](https://turso.tech/) (or another libSQL-compatible host):
-   - Install the [Turso CLI](https://docs.turso.tech/cli/introduction), then: `turso auth login`, `turso db create zaffr` (name as you like).
-   - `turso db show zaffr` → copy the **URL** (`libsql://…`).
-   - `turso db tokens create zaffr` → copy the **token**.
-   - In Vercel → **Settings → Environment Variables** (Production, and Preview if needed), add:
-     - **`DATABASE_URL`** = the `libsql://…` URL  
-     - **`DATABASE_AUTH_TOKEN`** = the token  
-   - **Redeploy** after saving env vars.
-   - **Create tables once** on that remote DB from your machine (with the same two variables in `.env` or inline):
+#### A. Configure the Vercel project (one-time)
 
-     ```bash
-     cd zaffr
-     DATABASE_URL="libsql://…" DATABASE_AUTH_TOKEN="…" npm run db:push
-     ```
+These tell Vercel **where** the Next.js app lives and **how** to build it.
 
-4. Do **not** override **Output Directory** for Next.js unless you know you need a custom setup; the default lets Vercel use the Next.js build output.
+1. Open your project on [vercel.com](https://vercel.com) → **Settings** → **Build and Deployment** (sometimes under **General**).
+2. Set **Root Directory** to **`zaffr`** (the folder that contains `package.json` and `next.config.js`).
+3. Set **Framework Preset** to **Next.js**, not **Other**.  
+   - **Why:** “Other” deploys a static site. This app needs the Next.js runtime; otherwise you get **`404 NOT_FOUND`**.  
+   - The repo also has [`zaffr/vercel.json`](./zaffr/vercel.json) with `"framework": "nextjs"` to reinforce that.
+4. Leave **Output Directory** **unoverridden** (default). Do not point it at `public` or `.` unless you have a special setup.
+
+#### B. Why you need a hosted database
+
+Locally, Zaffr often uses **`DATABASE_URL="file:./db.sqlite"`**. That means “SQLite on my computer’s disk.”
+
+**Vercel does not give you a persistent disk** for that file in production. So you must use a **hosted** SQLite-compatible database. These steps use **[Turso](https://turso.tech/)** (libSQL). You will get:
+
+- A **database URL** (starts with `libsql://` — this becomes `DATABASE_URL` on Vercel).
+- An **API token** (a secret string — this becomes `DATABASE_AUTH_TOKEN` on Vercel).
+
+Keep both secret; never commit them to git.
+
+#### C. Install the Turso CLI and sign in
+
+1. Install the CLI using the [official Turso CLI install guide](https://docs.turso.tech/cli/introduction) (Homebrew on macOS, or the script/curl method they document).
+2. In a terminal, run:
+
+   ```bash
+   turso auth login
+   ```
+
+3. Complete the browser login when prompted. You need a Turso account (free tier is enough to try this).
+
+#### D. Create the database and copy URL + token
+
+Pick a **database name** (example: `zaffr-prod`). Use the **same name** everywhere below instead of `zaffr-prod` if you choose something else.
+
+1. **Create the database**
+
+   ```bash
+   turso db create zaffr-prod
+   ```
+
+2. **Get the connection URL** (the `libsql://…` value)
+
+   ```bash
+   turso db show zaffr-prod
+   ```
+
+   In the output, find the **URL** line. It looks like `libsql://zaffr-prod-yourorg.turso.io`.  
+   **Copy that entire URL** and keep it somewhere safe (notes app, password manager). This string is your **`DATABASE_URL`**.
+
+3. **Create an auth token** (the secret the app uses to talk to Turso)
+
+   ```bash
+   turso db tokens create zaffr-prod
+   ```
+
+   The CLI prints a long token string. **Copy it once** — you often cannot see it again. This string is your **`DATABASE_AUTH_TOKEN`**.
+
+#### E. Add environment variables in Vercel
+
+1. On Vercel, open the **same project** → **Settings** → **Environment Variables**.
+2. Add **two** variables:
+
+   | Name | Value | Notes |
+   |------|--------|--------|
+   | `DATABASE_URL` | The `libsql://…` URL from step D.2 | No quotes needed in the Vercel UI. |
+   | `DATABASE_AUTH_TOKEN` | The token from step D.3 | Treat like a password. |
+
+3. For each variable, choose **Environments**:
+   - Enable at least **Production** (required for your live site).
+   - Enable **Preview** too if you want preview deployments to work with todos (optional but convenient).
+4. Save each variable.
+
+**Important:** Changing env vars does **not** update already-built deployments by itself.
+
+#### F. Redeploy
+
+1. Go to **Deployments**, open the latest deployment, use **⋯** (or **Redeploy**), and redeploy **with existing Build Cache** cleared if you want a clean build (optional).
+2. Or push a new commit to your connected branch — that triggers a new deployment that picks up the new env vars.
+
+Wait until the deployment shows **Ready**.
+
+#### G. Create tables on Turso (once per database)
+
+Your Turso database starts **empty**. The app expects tables such as `zaffr_todo`. You apply the schema **from your laptop** (not inside Vercel’s UI) using Drizzle’s **push** command.
+
+1. Open a terminal on your machine.
+2. Go to the app folder:
+
+   ```bash
+   cd zaffr
+   ```
+
+3. Run **one** of the following (same values as on Vercel):
+
+   **Option 1 — inline (good for a one-off):**
+
+   ```bash
+   DATABASE_URL="paste-libsql-url-here" DATABASE_AUTH_TOKEN="paste-token-here" npm run db:push
+   ```
+
+   **Option 2 — `.env` file (if you already use Turso locally):**  
+   Put `DATABASE_URL` and `DATABASE_AUTH_TOKEN` in `zaffr/.env`, then:
+
+   ```bash
+   npm run db:push
+   ```
+
+4. If the command succeeds, the remote database now has the tables Zaffr needs.
+
+#### H. Check the live site
+
+Open your Vercel URL, refresh the todo page, and try adding a todo. If something still fails, confirm: env vars are set for **Production**, you **redeployed** after adding them, and **`db:push`** completed without errors.
 
 ## Repository layout (high level)
 
