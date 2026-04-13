@@ -12,10 +12,15 @@ export const env = createEnv({
       .string()
       .min(1)
       .refine(
-        (s) => s.startsWith("file:") || z.string().url().safeParse(s).success,
-        { message: "DATABASE_URL must be a valid URL or file: path" }
+        (s) =>
+          s.startsWith("file:") ||
+          s.startsWith("libsql:") ||
+          z.string().url().safeParse(s).success,
+        { message: "DATABASE_URL must be file:, libsql:, or an http(s) URL" }
       )
       .optional(),
+    /** Required for remote libSQL (e.g. Turso) with DATABASE_URL. Omit for local `file:` only. */
+    DATABASE_AUTH_TOKEN: z.string().min(1).optional(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -36,6 +41,7 @@ export const env = createEnv({
    */
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
+    DATABASE_AUTH_TOKEN: process.env.DATABASE_AUTH_TOKEN,
     NODE_ENV: process.env.NODE_ENV,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },

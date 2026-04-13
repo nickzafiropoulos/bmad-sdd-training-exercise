@@ -7,6 +7,10 @@ import * as schema from "./schema";
 
 export type DB = LibSQLDatabase<typeof schema>;
 
+function isRemoteDatabaseUrl(url: string): boolean {
+  return /^(libsql:|https?:|wss?:|ws:)/i.test(url);
+}
+
 /**
  * Cache the Drizzle instance in development to avoid new connections on every HMR update.
  */
@@ -19,10 +23,22 @@ export function getDb(): DB {
     const url = env.DATABASE_URL;
     if (!url?.trim()) {
       throw new Error(
-        "DATABASE_URL is not set. Copy .env.example to .env for local development, or set DATABASE_URL in your deployment environment (for example Vercel → Settings → Environment Variables)."
+        "DATABASE_URL is not set. For Vercel: create a Turso database, then add DATABASE_URL (libsql://…) and DATABASE_AUTH_TOKEN in Project → Settings → Environment Variables, redeploy, and run db:push against that database once. See the repo README."
       );
     }
-    globalForDb.drizzle = drizzle(createClient({ url }), { schema });
+    const authToken = env.DATABASE_AUTH_TOKEN?.trim();
+    if (isRemoteDatabaseUrl(url) && !authToken) {
+      throw new Error(
+        "DATABASE_AUTH_TOKEN is not set. Remote databases (Turso) need both DATABASE_URL and DATABASE_AUTH_TOKEN. Create a token with `turso db tokens create <db-name>` and add it in Vercel → Environment Variables."
+      );
+    }
+    globalForDb.drizzle = drizzle(
+      createClient({
+        url,
+        ...(authToken ? { authToken } : {}),
+      }),
+      { schema }
+    );
   }
   return globalForDb.drizzle;
 }

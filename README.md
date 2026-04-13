@@ -50,7 +50,21 @@ The app is exposed on [http://localhost:3000](http://localhost:3000). SQLite dat
 
 1. **Root Directory:** `zaffr` (Project → Settings → General / Build and Deployment).
 2. **Framework Preset:** **Next.js** — not **Other**. If Vercel uses “Other”, it treats the site as static files and you get **`404 NOT_FOUND`** on every route because there is no `index.html` at the output root. The repo includes [`zaffr/vercel.json`](./zaffr/vercel.json) with `"framework": "nextjs"` so the correct preset is applied even when the dashboard was set to Other.
-3. **Environment variables:** set **`DATABASE_URL`** to a hosted LibSQL/Turso URL (file-based SQLite on disk is not suitable for Vercel’s serverless runtime).
+3. **Database (required):** Vercel has no persistent disk, so **`file:./db.sqlite` does not work**. Use [Turso](https://turso.tech/) (or another libSQL-compatible host):
+   - Install the [Turso CLI](https://docs.turso.tech/cli/introduction), then: `turso auth login`, `turso db create zaffr` (name as you like).
+   - `turso db show zaffr` → copy the **URL** (`libsql://…`).
+   - `turso db tokens create zaffr` → copy the **token**.
+   - In Vercel → **Settings → Environment Variables** (Production, and Preview if needed), add:
+     - **`DATABASE_URL`** = the `libsql://…` URL  
+     - **`DATABASE_AUTH_TOKEN`** = the token  
+   - **Redeploy** after saving env vars.
+   - **Create tables once** on that remote DB from your machine (with the same two variables in `.env` or inline):
+
+     ```bash
+     cd zaffr
+     DATABASE_URL="libsql://…" DATABASE_AUTH_TOKEN="…" npm run db:push
+     ```
+
 4. Do **not** override **Output Directory** for Next.js unless you know you need a custom setup; the default lets Vercel use the Next.js build output.
 
 ## Repository layout (high level)
