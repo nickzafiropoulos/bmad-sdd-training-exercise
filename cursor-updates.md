@@ -32,3 +32,4 @@
 - **2026-02-24:** BMAD Step 4 (QA activities): documented coverage ≥70% (80% stmts, 79.54% lines), a11y (axe E2E, 0 violations), performance note, security review (env, Zod, Drizzle, no secrets); updated process doc Section 5 and Summary.
 - **2026-02-24:** Closed gap: added consolidated **`docs/task-progress-documentation/ai-integration-log.md`** (agent usage, MCP, test generation, debugging, limitations); updated process doc to reference it and added row in Task complete table.
 - **2026-04-13:** Added root **`README.md`** describing the BMAD training repo, Zaffr app location, local dev and Docker steps, and links to `zaffr/README.md`.
+- **2026-04-13:** Fixed **`next build` without `DATABASE_URL`** by making `DATABASE_URL` optional in env validation and lazy-initialising the LibSQL/Drizzle client via a proxy in `zaffr/src/server/db/index.ts`; Drizzle Kit still requires `DATABASE_URL` in `drizzle.config.ts`.

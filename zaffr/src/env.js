@@ -7,13 +7,15 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
+    // Optional at build time (e.g. `next build` without DB); required at runtime when the DB is used.
     DATABASE_URL: z
       .string()
       .min(1)
       .refine(
         (s) => s.startsWith("file:") || z.string().url().safeParse(s).success,
         { message: "DATABASE_URL must be a valid URL or file: path" }
-      ),
+      )
+      .optional(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
