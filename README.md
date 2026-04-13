@@ -46,6 +46,13 @@ docker compose up --build
 
 The app is exposed on [http://localhost:3000](http://localhost:3000). SQLite data is persisted in the `zaffr-data` Docker volume. Health check: `/api/health`.
 
+### Deploying to Vercel
+
+1. **Root Directory:** `zaffr` (Project → Settings → General / Build and Deployment).
+2. **Framework Preset:** **Next.js** — not **Other**. If Vercel uses “Other”, it treats the site as static files and you get **`404 NOT_FOUND`** on every route because there is no `index.html` at the output root. The repo includes [`zaffr/vercel.json`](./zaffr/vercel.json) with `"framework": "nextjs"` so the correct preset is applied even when the dashboard was set to Other.
+3. **Environment variables:** set **`DATABASE_URL`** to a hosted LibSQL/Turso URL (file-based SQLite on disk is not suitable for Vercel’s serverless runtime).
+4. Do **not** override **Output Directory** for Next.js unless you know you need a custom setup; the default lets Vercel use the Next.js build output.
+
 ## Repository layout (high level)
 
 | Path | Contents |

@@ -33,3 +33,4 @@
 - **2026-02-24:** Closed gap: added consolidated **`docs/task-progress-documentation/ai-integration-log.md`** (agent usage, MCP, test generation, debugging, limitations); updated process doc to reference it and added row in Task complete table.
 - **2026-04-13:** Added root **`README.md`** describing the BMAD training repo, Zaffr app location, local dev and Docker steps, and links to `zaffr/README.md`.
 - **2026-04-13:** Fixed **`next build` without `DATABASE_URL`** by making `DATABASE_URL` optional in env validation and lazy-initialising the LibSQL/Drizzle client via a proxy in `zaffr/src/server/db/index.ts`; Drizzle Kit still requires `DATABASE_URL` in `drizzle.config.ts`.
+- **2026-04-13:** Added **`zaffr/vercel.json`** (`framework: nextjs`) and README **Deploying to Vercel** notes so Vercel does not use the “Other” static preset (which caused 404s); dashboard should still use Framework Preset **Next.js**.
