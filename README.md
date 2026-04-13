@@ -65,7 +65,7 @@ Locally, Zaffr often uses **`DATABASE_URL="file:./db.sqlite"`**. That means “S
 
 **Vercel does not give you a persistent disk** for that file in production. So you must use a **hosted** SQLite-compatible database. These steps use **[Turso](https://turso.tech/)** (libSQL). You will get:
 
-- A **database URL** (starts with `libsql://` — this becomes `DATABASE_URL` on Vercel).
+- A **database URL** (starts with `libsql://` — this becomes `DATABASE_URL` on Vercel; use `https://` instead of `libsql://` for better reliability in serverless).
 - An **API token** (a secret string — this becomes `DATABASE_AUTH_TOKEN` on Vercel).
 
 Keep both secret; never commit them to git.
@@ -115,7 +115,7 @@ Pick a **database name** (example: `zaffr-prod`). Use the **same name** everywhe
 
    | Name | Value | Notes |
    |------|--------|--------|
-   | `DATABASE_URL` | The `libsql://…` URL from step D.2 | No quotes needed in the Vercel UI. |
+   | `DATABASE_URL` | The URL from step D.2 — use `https://` instead of `libsql://` (same hostname) for serverless reliability. | No quotes needed in the Vercel UI. |
    | `DATABASE_AUTH_TOKEN` | The token from step D.3 | Treat like a password. |
 
 3. For each variable, choose **Environments**:

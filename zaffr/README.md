@@ -1,47 +1,55 @@
 # Zaffr
 
-A minimal todo list app built with the [T3 Stack](https://create.t3.gg/) (Next.js, tRPC, Drizzle, Tailwind).
+A minimal todo list app built with the [T3 Stack](https://create.t3.gg/): **Next.js** (App Router), **tRPC**, **Drizzle ORM**, **SQLite/Turso** (libSQL), **Tailwind CSS**, and **TypeScript**.
+
+## Getting started
+
+```bash
+npm install
+cp .env.example .env
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
 
 ## Scripts
 
-- **`npm run dev`** — Start the dev server (Next.js).
-- **`npm run build`** — Production build.
-- **`npm test`** — Run unit and integration tests (Vitest).
-- **`npm run test:coverage`** — Run tests with coverage report (output in `./coverage`; aim for ≥70% meaningful coverage).
-- **`npm run test:e2e`** — Run E2E tests (Playwright; starts the app automatically).
+| Command | Purpose |
+|--------|---------|
+| `npm run dev` | Dev server (Next.js with Turbopack) |
+| `npm run build` | Production build |
+| `npm run start` | Run production server (after `build`) |
+| `npm test` | Unit and integration tests (Vitest) |
+| `npm run test:coverage` | Tests with coverage report (`./coverage`) |
+| `npm run test:e2e` | E2E tests (Playwright; starts the app automatically) |
+| `npm run typecheck` | TypeScript type check without emit |
+| `npm run db:generate` | Generate Drizzle migrations |
+| `npm run db:migrate` | Run Drizzle migrations |
+| `npm run db:push` | Push schema directly to database |
+| `npm run db:studio` | Open Drizzle Studio |
+| `npm run db:clear-todos` | Delete all todos from the database |
 
-## Running with Docker
+## Database
+
+**Local development** uses a SQLite file (`file:./db.sqlite` by default). Set `DATABASE_URL` in `.env`.
+
+**Production (Vercel)** uses [Turso](https://turso.tech/) (hosted libSQL). You need both `DATABASE_URL` (the `https://` or `libsql://` URL) and `DATABASE_AUTH_TOKEN`. See the [root README](../README.md#deploying-to-vercel) for full setup steps.
+
+## Docker
 
 From the **repository root** (not `zaffr/`):
 
 ```bash
-docker compose up
+docker compose up --build
 ```
 
-App: http://localhost:3001. Health: http://localhost:3001/api/health. (Port 3001 is used so the container doesn’t clash with a local dev server on 3000.) SQLite data is stored in the `zaffr-data` volume.
+App: [http://localhost:3000](http://localhost:3000). Health: [http://localhost:3000/api/health](http://localhost:3000/api/health). SQLite data is persisted in the `zaffr-data` Docker volume.
 
-## What's next? How do I make an app with this?
+## Tech stack
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
-
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
-
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
-
-## Learn More
-
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
-
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
-
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+- [Next.js](https://nextjs.org) — React framework (App Router)
+- [tRPC](https://trpc.io) — End-to-end typesafe APIs
+- [Drizzle ORM](https://orm.drizzle.team) — TypeScript ORM for SQL
+- [Tailwind CSS](https://tailwindcss.com) — Utility-first CSS
+- [Vitest](https://vitest.dev) — Unit and integration testing
+- [Playwright](https://playwright.dev) — End-to-end testing
