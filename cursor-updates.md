@@ -36,3 +36,4 @@
 - **2026-04-13:** Added **`zaffr/vercel.json`** (`framework: nextjs`) and README **Deploying to Vercel** notes so Vercel does not use the “Other” static preset (which caused 404s); dashboard should still use Framework Preset **Next.js**.
 - **2026-04-13:** Vercel/Turso support: optional **`DATABASE_AUTH_TOKEN`** in `env.js`, libSQL **`authToken`** in `getDb()`, stricter errors for missing URL/token, **`libsql:`** allowed in `DATABASE_URL` validation; **`drizzle.config.ts`** uses **`turso`** dialect with token for remote URLs; README and `.env.example` document Turso + `db:push`.
 - **2026-04-13:** README **Deploying to Vercel** rewritten as phased steps (A–H): Vercel settings, why Turso is needed, CLI install/login, create DB + URL + token, Vercel env vars, redeploy, `db:push`, verify.
+- **2026-04-13:** Vercel deployment fully working with Turso (https:// URL + auth token); reverted temporary diagnostic health endpoint.
